@@ -8,8 +8,15 @@ interface IExpenseItem {
 }
 
 const ExpenseItem: React.FC<IExpenseItem> = ({ item }) => {
+  const expensePressHandler = () => {
+    console.log("Press on item");
+  };
+
   return (
-    <Pressable>
+    <Pressable
+      onPress={expensePressHandler}
+      style={({ pressed }) => pressed && styles.pressed}
+    >
       <View style={styles.expenseItem}>
         <View>
           <Text style={[styles.textBase, styles.description]}>
@@ -30,6 +37,9 @@ const ExpenseItem: React.FC<IExpenseItem> = ({ item }) => {
 export default ExpenseItem;
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.75,
+  },
   expenseItem: {
     padding: 12,
     marginVertical: 8,

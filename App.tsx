@@ -15,6 +15,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import ManageExpense from "./Screens/ManageExpense";
 import RecentExpense from "./Screens/RecentExpense";
 import AllExpenses from "./Screens/AllExpenses";
+import IconButton from "./components/UI/IconButton";
 
 export enum NameRoute {
   MANAGE_EXPENSE = "ManageExpense",
@@ -46,6 +47,15 @@ const ExpensesOverview = () => {
         // Bottom tab
         tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
         tabBarActiveTintColor: GlobalStyles.colors.accent500,
+        // button top right corner
+        headerRight: ({ tintColor }) => (
+          <IconButton
+            icon="add"
+            size={24}
+            color={tintColor ? tintColor : ""}
+            onPress={() => console.log("Button Right")}
+          />
+        ),
       }}
     >
       <BottomTabs.Screen
