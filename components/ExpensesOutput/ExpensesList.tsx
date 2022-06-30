@@ -1,4 +1,5 @@
 import { FlatList, ListRenderItemInfo, Text } from "react-native";
+import ExpenseItem from "./ExpenseItem";
 import { IExpense, IExpensesOutput } from "./ExpensesOutput";
 
 interface IExpensesList {
@@ -6,7 +7,7 @@ interface IExpensesList {
 }
 
 const expenseItem = (data: ListRenderItemInfo<IExpense>) => {
-  return <Text>{data.item.description}</Text>;
+  return <ExpenseItem item={data.item} />;
 };
 
 const ExpensesList: React.FC<IExpensesList> = ({ expenses }) => {

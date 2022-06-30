@@ -1,5 +1,6 @@
 import React from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { GlobalStyles } from "../../constants/styles";
 import ExpensesList from "./ExpensesList";
 import ExpensesSummary from "./ExpensesSummary";
 
@@ -34,6 +35,37 @@ const DUMMY_EXPENSES: IExpense[] = [
     amount: 95.99,
     date: new Date("2022-05-25"),
   },
+  //
+  {
+    id: "e6",
+    description: "Monitor",
+    amount: 88,
+    date: new Date("2022-06-30"),
+  },
+  {
+    id: "e7",
+    description: "Mouse",
+    amount: 5.99,
+    date: new Date("2021-06-29"),
+  },
+  {
+    id: "e8",
+    description: "Mangoes",
+    amount: 5.99,
+    date: new Date("2021-12-01"),
+  },
+  {
+    id: "e9",
+    description: "mouse pad",
+    amount: 45.99,
+    date: new Date("2022-02-19"),
+  },
+  {
+    id: "e10",
+    description: "IMac",
+    amount: 95.99,
+    date: new Date("2022-05-25"),
+  },
 ];
 
 export interface IExpense {
@@ -53,7 +85,7 @@ const ExpensesOutput: React.FC<IExpensesOutput> = ({
   expensePeriod,
 }) => {
   return (
-    <View>
+    <View style={styles.container}>
       {/* Summary */}
       <ExpensesSummary
         expenses={DUMMY_EXPENSES}
@@ -67,3 +99,13 @@ const ExpensesOutput: React.FC<IExpensesOutput> = ({
 };
 
 export default ExpensesOutput;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: GlobalStyles.colors.primary700,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 0,
+  },
+});
