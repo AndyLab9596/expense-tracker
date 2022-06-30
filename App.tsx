@@ -1,21 +1,28 @@
 import { StatusBar } from "expo-status-bar";
-
+// Screens
+import IconButton from "./components/UI/IconButton";
+import RecentExpense from "./Screens/RecentExpense";
+import AllExpenses from "./Screens/AllExpenses";
+import ManageExpense from "./Screens/ManageExpense";
 // Navigators
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  CompositeScreenProps,
+  NavigationContainer,
+} from "@react-navigation/native";
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
+import {
+  BottomTabScreenProps,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
 
 // Colors
 import { GlobalStyles } from "./constants/styles";
 
 // Icons
 import Ionicons from "@expo/vector-icons/Ionicons";
-
-// Screens
-import ManageExpense from "./Screens/ManageExpense";
-import RecentExpense from "./Screens/RecentExpense";
-import AllExpenses from "./Screens/AllExpenses";
-import IconButton from "./components/UI/IconButton";
 
 export enum NameRoute {
   MANAGE_EXPENSE = "ManageExpense",
@@ -34,13 +41,18 @@ export type RootBottomTabsParamList = {
   [NameRoute.ALL_EXPENSES]: undefined;
 };
 
+export type ExpensesScreenNavigationProps = CompositeScreenProps<
+  NativeStackScreenProps<RootStackParamList>,
+  BottomTabScreenProps<RootBottomTabsParamList>
+>;
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const BottomTabs = createBottomTabNavigator<RootBottomTabsParamList>();
 
 const ExpensesOverview = () => {
   return (
     <BottomTabs.Navigator
-      screenOptions={{
+      screenOptions={({ navigation }: ExpensesScreenNavigationProps) => ({
         // Header
         headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
         headerTintColor: "white",
@@ -53,10 +65,12 @@ const ExpensesOverview = () => {
             icon="add"
             size={24}
             color={tintColor ? tintColor : ""}
-            onPress={() => console.log("Button Right")}
+            onPress={() => {
+              navigation.navigate(NameRoute.MANAGE_EXPENSE);
+            }}
           />
         ),
-      }}
+      })}
     >
       <BottomTabs.Screen
         name={NameRoute.RECENT_EXPENSES}

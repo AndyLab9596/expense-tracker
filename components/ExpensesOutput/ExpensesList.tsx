@@ -1,6 +1,6 @@
-import { FlatList, ListRenderItemInfo, Text } from "react-native";
-import ExpenseItem from "./ExpenseItem";
+import { FlatList, ListRenderItemInfo } from "react-native";
 import { IExpense, IExpensesOutput } from "./ExpensesOutput";
+import ExpenseItem from "./ExpenseItem";
 
 interface IExpensesList {
   expenses: IExpensesOutput["expenses"];

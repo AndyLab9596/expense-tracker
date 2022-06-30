@@ -1,4 +1,9 @@
-import { Pressable, Text, View, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ExpensesScreenNavigationProps,
+  NameRoute
+} from "../../App";
 import { GlobalStyles } from "../../constants/styles";
 import { getFormatterDate } from "../../utils/date";
 import { IExpense } from "./ExpensesOutput";
@@ -8,8 +13,11 @@ interface IExpenseItem {
 }
 
 const ExpenseItem: React.FC<IExpenseItem> = ({ item }) => {
+  const navigation =
+    useNavigation<ExpensesScreenNavigationProps["navigation"]>();
+
   const expensePressHandler = () => {
-    console.log("Press on item");
+    navigation.navigate(NameRoute.MANAGE_EXPENSE);
   };
 
   return (
