@@ -32,7 +32,11 @@ export enum NameRoute {
 }
 
 export type RootStackParamList = {
-  [NameRoute.MANAGE_EXPENSE]: undefined;
+  [NameRoute.MANAGE_EXPENSE]:
+    | {
+        expenseId: string;
+      }
+    | undefined;
   [NameRoute.EXPENSES_OVERVIEW]: undefined;
 };
 
@@ -103,7 +107,15 @@ const App = () => {
     <>
       <StatusBar style="auto" />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={NameRoute.EXPENSES_OVERVIEW}>
+        <Stack.Navigator
+          initialRouteName={NameRoute.EXPENSES_OVERVIEW}
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: GlobalStyles.colors.primary500,
+            },
+            headerTintColor: "white",
+          }}
+        >
           {/* Initial Page with Bottom Tabs  */}
           <Stack.Screen
             name={NameRoute.EXPENSES_OVERVIEW}
@@ -116,6 +128,11 @@ const App = () => {
           <Stack.Screen
             name={NameRoute.MANAGE_EXPENSE}
             component={ManageExpense}
+            options={{
+              // title: "Manage Expense",
+              // this is how the page was shown
+              presentation: "modal",
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
