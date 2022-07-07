@@ -5,6 +5,7 @@ import { NameRoute, RootStackParamList } from "../App";
 import Button from "../components/UI/Button";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
+import { useAppContext } from "../store/expenses-context";
 
 type IManageExpense = NativeStackScreenProps<
   RootStackParamList,
@@ -14,15 +15,35 @@ type IManageExpense = NativeStackScreenProps<
 const ManageExpense: React.FC<IManageExpense> = ({ navigation, route }) => {
   const editedExpenseId = route.params?.expenseId;
 
+  const { deleteExpense, addExpense, updateExpense } = useAppContext();
+
   const isEditing = !!editedExpenseId;
 
   const deleteExpenseHandler = () => {
+    deleteExpense(editedExpenseId as string);
     navigation.goBack();
   };
   const cancelHandler = () => {
     navigation.goBack();
   };
   const confirmHandler = () => {
+    if (isEditing) {
+      updateExpense({
+        id: "e1",
+        expense: {
+          id: "e1",
+          description: "Test",
+          amount: 19.99,
+          date: new Date("2022-07-07"),
+        },
+      });
+    } else {
+      addExpense({
+        description: "Test",
+        amount: 19.99,
+        date: new Date("2022-07-07"),
+      });
+    }
     navigation.goBack();
   };
 

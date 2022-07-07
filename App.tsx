@@ -23,6 +23,7 @@ import { GlobalStyles } from "./constants/styles";
 
 // Icons
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { ExpensesContextProvider } from "./store/expenses-context";
 
 export enum NameRoute {
   MANAGE_EXPENSE = "ManageExpense",
@@ -104,8 +105,8 @@ const ExpensesOverview = () => {
 
 const App = () => {
   return (
-    <>
-      <StatusBar style="auto" />
+    <ExpensesContextProvider>
+      <StatusBar style="light" />
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={NameRoute.EXPENSES_OVERVIEW}
@@ -136,7 +137,7 @@ const App = () => {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </>
+    </ExpensesContextProvider>
   );
 };
 

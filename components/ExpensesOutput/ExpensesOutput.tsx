@@ -1,6 +1,7 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
+import { useAppContext } from "../../store/expenses-context";
 import ExpensesList from "./ExpensesList";
 import ExpensesSummary from "./ExpensesSummary";
 
@@ -78,22 +79,31 @@ export interface IExpense {
 export interface IExpensesOutput {
   expenses: IExpense[];
   expensePeriod: string;
+  fallbackText: string;
 }
 
 const ExpensesOutput: React.FC<IExpensesOutput> = ({
   expenses,
   expensePeriod,
+  fallbackText,
 }) => {
+  let content = <Text style={styles.infoText}>{fallbackText}</Text>;
+
+  if (expenses.length > 0) {
+    content = <ExpensesList expenses={expenses} />;
+  }
+
   return (
     <View style={styles.container}>
       {/* Summary */}
       <ExpensesSummary
-        expenses={DUMMY_EXPENSES}
+        expenses={expenses}
         //   expenses={expenses}
         periodName={expensePeriod}
       />
       {/* List */}
-      <ExpensesList expenses={DUMMY_EXPENSES} />
+      {/* <ExpensesList expenses={expenses} /> */}
+      {content}
     </View>
   );
 };
@@ -107,5 +117,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 24,
     paddingBottom: 0,
+  },
+  infoText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 32,
   },
 });
