@@ -23,14 +23,14 @@ export interface IExpensesInitialValue {
   expenses: IExpense[];
   addExpense: ({ description, amount, date }: TAddExpenseProps) => void;
   deleteExpense: (id: string) => void;
-  updateExpense: ({ id, expense }: IUpdateExpenseProps) => void;
+  updateExpense: (expense: IExpense) => void;
 }
 
 const expensesInitialValue: IExpensesInitialValue = {
   expenses: DUMMY_EXPENSES,
   addExpense: ({ description, amount, date }: TAddExpenseProps) => {},
   deleteExpense: (id: string) => {},
-  updateExpense: ({ id, expense }: IUpdateExpenseProps) => {},
+  updateExpense: (expense: IExpense) => {},
 };
 
 const ExpensesContext =
@@ -60,11 +60,11 @@ const ExpensesContextProvider = ({ children }: IContextProvider) => {
     });
   };
 
-  const updateExpense = ({ id, expense }: IUpdateExpenseProps) => {
+  const updateExpense = (expense: IExpense) => {
     dispatch({
       type: ActionTypes.UPDATE,
       payload: {
-        id,
+        id: expense.id,
         updatedExpense: expense,
       },
     });
