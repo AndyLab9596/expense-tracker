@@ -17,6 +17,11 @@ type ExpensesPayload = {
   [ActionTypes.DELETE]: {
     id: string,
   };
+  [ActionTypes.SET]: {
+    expenses: IExpense[]
+  },
+  [ActionTypes.FETCHING]: undefined,
+  [ActionTypes.FINISH_FETCHING]: undefined
 };
 
 type ExpensesAction = ActionMap<ExpensesPayload>[keyof ExpensesPayload];
@@ -51,6 +56,27 @@ const expensesReducer = (
         ...state,
         expenses: cloneExpenses,
       };
+    }
+
+    case ActionTypes.SET: {
+      return {
+        ...state,
+        expenses: action.payload.expenses.reverse(),
+      }
+    }
+
+    case ActionTypes.FETCHING: {
+      return {
+        ...state,
+        isLoading: true,
+      }
+    }
+
+    case ActionTypes.FINISH_FETCHING: {
+      return {
+        ...state,
+        isLoading: false,
+      }
     }
 
     default:

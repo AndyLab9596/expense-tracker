@@ -1,12 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useLayoutEffect, useState } from "react";
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { GlobalStyles } from "../../constants/styles";
 import { useAppContext } from "../../store/expenses-context";
+import { getFormatterDate } from "../../utils/date";
 import { IExpense } from "../ExpensesOutput/ExpensesOutput";
 import Button from "../UI/Button";
+import LoadingOverlay from "../UI/LoadingOverlay";
 import Input from "./Input";
-import { getFormatterDate } from "../../utils/date";
-import { GlobalStyles } from "../../constants/styles";
 
 interface IExpenseForm {
   isEditing: boolean;
@@ -24,17 +25,11 @@ const ExpenseForm: React.FC<IExpenseForm> = ({
 }) => {
   const navigation = useNavigation();
 
-  const { expenses, addExpense, updateExpense } = useAppContext();
+  const { expenses, addExpense, updateExpense, isLoading } = useAppContext();
 
   const initialValue = expenses.find(
     (expense) => expense.id === editedExpenseId
   ) as IExpense;
-
-  // const [inputvalues, setInputValues] = useState({
-  //   amount: editedExpenseId ? initialValue.amount.toString() : "",
-  //   date: editedExpenseId ? getFormatterDate(new Date(initialValue.date)) : "",
-  //   description: editedExpenseId ? initialValue.description : "",
-  // });
 
   // When ever you fetch a input, it's always a string even input number
   const [inputs, setInputs] = useState({
@@ -44,7 +39,9 @@ const ExpenseForm: React.FC<IExpenseForm> = ({
     },
     date: {
       value: editedExpenseId
-        ? getFormatterDate(new Date(initialValue.date))
+        // ? getFormatterDate(initialValue.date)
+        ? initialValue.date
+
         : "",
       isValid: true,
     },
@@ -70,7 +67,7 @@ const ExpenseForm: React.FC<IExpenseForm> = ({
     navigation.goBack();
   };
 
-  const confirmHandler = () => {
+  const confirmHandler = async () => {
     // validation
     const amountIsvalid =
       !isNaN(+inputs.amount.value) && +inputs.amount.value > 0;
@@ -99,19 +96,17 @@ const ExpenseForm: React.FC<IExpenseForm> = ({
       return;
     }
 
+    const addedData: Omit<IExpense, "id"> = {
+      description: inputs?.description.value,
+      amount: +inputs?.amount.value,
+      date: new Date(inputs?.date.value),
+    };
+
+
     if (isEditing) {
-      updateExpense({
-        id: editedExpenseId,
-        description: inputs?.description.value,
-        amount: +inputs?.amount.value,
-        date: new Date(inputs?.date.value),
-      });
+      await updateExpense(editedExpenseId, addedData);
     } else {
-      addExpense({
-        description: inputs?.description.value,
-        amount: +inputs?.amount.value,
-        date: new Date(inputs?.date.value),
-      });
+      await addExpense(addedData);
     }
     navigation.goBack();
   };
@@ -126,6 +121,10 @@ const ExpenseForm: React.FC<IExpenseForm> = ({
       title: isEditing ? "Edit Expense" : "Add Expense",
     });
   }, [navigation, isEditing]);
+
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <View style={styles.form}>
@@ -150,7 +149,7 @@ const ExpenseForm: React.FC<IExpenseForm> = ({
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
             onChangeText: (text) => inputChangedHandler("date", text),
-            value: inputs.date.value,
+            value: typeof inputs.date.value === 'string' ? inputs.date.value : getFormatterDate(inputs.date.value),
           }}
           style={styles.rowInput}
           invalid={!inputs.date.isValid}
@@ -170,7 +169,9 @@ const ExpenseForm: React.FC<IExpenseForm> = ({
         invalid={!inputs.description.isValid}
       />
       {formIsInValid && (
-        <Text style={styles.errorText}>Invalide input values - please check your entered data!</Text>
+        <Text style={styles.errorText}>
+          Invalide input values - please check your entered data!
+        </Text>
       )}
       <View style={styles.topButtonContainer}>
         <Button mode="flat" onPress={cancelHandler} style={styles.button}>

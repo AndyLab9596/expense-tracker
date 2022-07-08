@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { NameRoute, RootStackParamList } from "../App";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import IconButton from "../components/UI/IconButton";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 import { GlobalStyles } from "../constants/styles";
 import { useAppContext } from "../store/expenses-context";
 
@@ -14,7 +15,7 @@ type IManageExpense = NativeStackScreenProps<
 const ManageExpense: React.FC<IManageExpense> = ({ navigation, route }) => {
   const editedExpenseId = route.params?.expenseId;
 
-  const { deleteExpense } = useAppContext();
+  const { deleteExpense, isLoading } = useAppContext();
 
   const isEditing = !!editedExpenseId;
 
@@ -22,6 +23,10 @@ const ManageExpense: React.FC<IManageExpense> = ({ navigation, route }) => {
     deleteExpense(editedExpenseId as string);
     navigation.goBack();
   };
+
+  // if (isLoading) {
+  //   return <LoadingOverlay />;
+  // }
 
   return (
     <View style={styles.container}>
